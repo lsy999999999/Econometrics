@@ -1,0 +1,4 @@
+"equation","method","key_term","estimate","robust_se","statistic","p_value","N","note"
+"return_equation","OLS_HC3","RateVulnerability_z",-1.09788237897484,0.536065766252205,-2.04803672999017,0.0471601923743524,49,"Baseline single-equation estimate."
+"return_equation","2SLS_manual_HC3_primary_Z_precovid","RateVulnerability_z",-1.8119313231964,1.73179943288642,-1.04627088379191,0.301717508301408,49,"Primary IV uses the strongest predetermined historical exposure."
+"return_equation","2SLS_manual_HC3_system_IV_set","RateVulnerability_z",-1.66366860305822,1.36131857974753,-1.22210085707253,0.228822512242232,49,"Uses the SEM historical IV set."

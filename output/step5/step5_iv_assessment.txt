@@ -1,0 +1,8 @@
+Step 5 IV assessment:
+Candidate IVs use pre-sample industry rate sensitivity estimated before the main event-estimation window.
+Relevance is testable through the first stage. Exogeneity and exclusion are not mechanically testable and require economic judgment.
+The pre-sample IVs are temporally predetermined, so reverse causality from the 2022-11-02 CAR is unlikely.
+However, they may still capture persistent industry risk characteristics, duration, safe-haven exposure, or macro sensitivity, so the exclusion restriction is contestable.
+GoldDummy, HighGrowthProxy, HighVolProxy, FinanceDummy, and DefensiveDummy are proxy/control variables, not IVs, because they plausibly affect event-window CAR directly.
+Therefore IV/2SLS should be treated as exploratory robustness, not the paper's primary identification strategy.
+If first-stage F is weak or 2SLS estimates are imprecise, do not use IV as main conclusion; rely on OLS with controls, HC3, proxy checks, and measurement-error robustness.

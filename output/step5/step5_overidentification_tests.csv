@@ -1,0 +1,4 @@
+"test","statistic","df","p_value","note"
+"Sargan overidentification: IV_one_presample_2Y",NA,0,NA,"Exactly identified; overidentification test not available."
+"Sargan overidentification: IV_two_presample_2Y_10Y",1.59071923148076,1,0.207223405805788,"Tests joint validity of overidentifying restrictions under homoskedasticity."
+"Sargan overidentification: IV_simple_presample_2Y",NA,0,NA,"Exactly identified; overidentification test not available."

@@ -1,0 +1,4 @@
+"Model","Method","DepVar","Core_X","Controls","Proxy","IV","term","beta","SE_HC3","t_value","p_value","N"
+"IV_one_presample_2Y","2SLS_manual_HC3","CAR","RateVulnerability_z","MktBeta_z; SMBBeta_z; HMLBeta_z; RMWBeta_z; CMABeta_z; HistVol_z; PreMomentum_z","","Z_presample_2Y_z","RateVulnerability_z",-0.419723808916578,1.57952941416692,-0.265727124263748,0.79181421048035,49
+"IV_two_presample_2Y_10Y","2SLS_manual_HC3","CAR","RateVulnerability_z","MktBeta_z; SMBBeta_z; HMLBeta_z; RMWBeta_z; CMABeta_z; HistVol_z; PreMomentum_z","","Z_presample_2Y_z; Z_presample_10Y_z","RateVulnerability_z",-0.861027057197391,1.72873634898893,-0.498067306620221,0.621164107075727,49
+"IV_simple_presample_2Y","2SLS_manual_HC3","CAR","RateVulnerability_z","MktBeta_z; SMBBeta_z; HMLBeta_z; RMWBeta_z; CMABeta_z; HistVol_z; PreMomentum_z","","Z_presample_simple_2Y_z","RateVulnerability_z",-2.80895508845991,2.0637790621482,-1.36107354705694,0.181109556470216,49

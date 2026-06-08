@@ -1,0 +1,3 @@
+"Model","Method","DepVar","Core_X","Controls","Proxy","IV","term","beta","SE_HC3","t_value","p_value","N"
+"Mechanism_HighGrowth_interaction_main","OLS_HC3","CAR","RateVulnerability_z","MktBeta_z; SMBBeta_z; HMLBeta_z; RMWBeta_z; CMABeta_z; HistVol_z; PreMomentum_z","HighGrowthProxy","","RateVulnerability_z",-0.316619640885217,0.742156500668266,-0.426621124520394,0.672062615925698,49
+"Mechanism_HighVol_interaction_main","OLS_HC3","CAR","RateVulnerability_z","MktBeta_z; SMBBeta_z; HMLBeta_z; RMWBeta_z; CMABeta_z; HistVol_z; PreMomentum_z","HighVolProxy","","RateVulnerability_z",0.0452879186388251,0.878733343051615,0.0515377264296718,0.959167011228348,49

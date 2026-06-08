@@ -1,0 +1,5 @@
+"Model","Method","DepVar","Core_X","Controls","Proxy","IV","term","beta","SE_HC3","t_value","p_value","N"
+"Y_AR0","OLS_HC3","CAR_1","RateVulnerability_z","MktBeta_z; SMBBeta_z; HMLBeta_z; RMWBeta_z; CMABeta_z; HistVol_z; PreMomentum_z","","","RateVulnerability_z",-0.427231745416691,0.235438203205144,-1.8146237084745,0.077086302545191,49
+"Y_CAR3","OLS_HC3","CAR_3","RateVulnerability_z","MktBeta_z; SMBBeta_z; HMLBeta_z; RMWBeta_z; CMABeta_z; HistVol_z; PreMomentum_z","","","RateVulnerability_z",-1.09788237897484,0.536065766252205,-2.04803672999017,0.0471601923743524,49
+"Y_CAR5","OLS_HC3","CAR_5","RateVulnerability_z","MktBeta_z; SMBBeta_z; HMLBeta_z; RMWBeta_z; CMABeta_z; HistVol_z; PreMomentum_z","","","RateVulnerability_z",-0.710032678978629,0.40288548213907,-1.76236849044249,0.0856475141443914,49
+"Y_CAR3_exGold","OLS_HC3","CAR_3_exGold","RateVulnerability_z","MktBeta_z; SMBBeta_z; HMLBeta_z; RMWBeta_z; CMABeta_z; HistVol_z; PreMomentum_z","","","RateVulnerability_z",-0.738126175545337,0.454797152087085,-1.62297888664879,0.112650920161471,48

@@ -1,0 +1,2 @@
+"method","residual_correlation","p_value","note"
+"systemfit_2SLS",-0.167220849183631,0.250788431830324,"Correlation of structural residual estimates; 3SLS is mainly an efficiency refinement when errors are correlated."

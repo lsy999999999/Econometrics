@@ -1,0 +1,74 @@
+
+systemfit results 
+method: 3SLS 
+
+        N DF     SSR detRCov  OLS-R2 McElroy-R2
+system 98 84 220.706 3.17441 0.52561   0.484499
+
+          N DF      SSR     MSE     RMSE       R2   Adj R2
+returnEq 49 40 190.2919 4.75730 2.181123 0.543929 0.452714
+vulnEq   49 44  30.4141 0.69123 0.831403 0.366372 0.308770
+
+The covariance matrix of the residuals used for estimation
+          returnEq    vulnEq
+returnEq  4.734449 -0.302976
+vulnEq   -0.302976  0.693370
+
+The covariance matrix of the residuals
+          returnEq    vulnEq
+returnEq  4.757298 -0.337608
+vulnEq   -0.337608  0.691230
+
+The correlations of the residuals
+          returnEq    vulnEq
+returnEq  1.000000 -0.186175
+vulnEq   -0.186175  1.000000
+
+
+3SLS estimates for 'returnEq' (equation 1)
+Model Formula: CAR_3day ~ RateVulnerability_z + MktBeta_z + SMBBeta_z + HMLBeta_z + 
+    RMWBeta_z + CMABeta_z + HistVol_z + PreMomentum_z
+Instruments: ~Z_precovid_2Y_z + Z_early_nonoverlap_2Y_z + Z_verylong_2Y_z + 
+    MktBeta_z + SMBBeta_z + HMLBeta_z + RMWBeta_z + CMABeta_z + 
+    HistVol_z + PreMomentum_z
+
+                     Estimate Std. Error  t value   Pr(>|t|)    
+(Intercept)         -2.731429   0.310840 -8.78725 7.0001e-11 ***
+RateVulnerability_z -1.673900   0.750512 -2.23034 0.03140059 *  
+MktBeta_z           -0.735319   0.718101 -1.02398 0.31199942    
+SMBBeta_z            2.164326   0.574242  3.76901 0.00052946 ***
+HMLBeta_z            0.373600   0.461858  0.80891 0.42335458    
+RMWBeta_z           -1.392437   0.782227 -1.78009 0.08265826 .  
+CMABeta_z            0.147068   0.426165  0.34510 0.73183023    
+HistVol_z           -1.525566   0.798713 -1.91003 0.06331822 .  
+PreMomentum_z        1.381008   0.511193  2.70154 0.01007429 *  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 2.181123 on 40 degrees of freedom
+Number of observations: 49 Degrees of Freedom: 40 
+SSR: 190.291919 MSE: 4.757298 Root MSE: 2.181123 
+Multiple R-Squared: 0.543929 Adjusted R-Squared: 0.452714 
+
+
+3SLS estimates for 'vulnEq' (equation 2)
+Model Formula: RateVulnerability_z ~ CAR_3day + Z_precovid_2Y_z + Z_early_nonoverlap_2Y_z + 
+    Z_verylong_2Y_z
+Instruments: ~Z_precovid_2Y_z + Z_early_nonoverlap_2Y_z + Z_verylong_2Y_z + 
+    MktBeta_z + SMBBeta_z + HMLBeta_z + RMWBeta_z + CMABeta_z + 
+    HistVol_z + PreMomentum_z
+
+                          Estimate Std. Error  t value  Pr(>|t|)   
+(Intercept)              0.4507151  0.2043674  2.20542 0.0326952 * 
+CAR_3day                 0.1650108  0.0608398  2.71222 0.0095001 **
+Z_precovid_2Y_z          0.8438006  0.3536721  2.38583 0.0214103 * 
+Z_early_nonoverlap_2Y_z  0.2043622  0.2390395  0.85493 0.3972207   
+Z_verylong_2Y_z         -0.2093585  0.4595753 -0.45555 0.6509554   
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.831403 on 44 degrees of freedom
+Number of observations: 49 Degrees of Freedom: 44 
+SSR: 30.414131 MSE: 0.69123 Root MSE: 0.831403 
+Multiple R-Squared: 0.366372 Adjusted R-Squared: 0.30877 
+

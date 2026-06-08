@@ -1,0 +1,4 @@
+"equation","test","endogenous_rhs_variable","instruments","residual_coefficient","p_value","reject_exogeneity_5pct","N"
+"return_equation_primary_IV","Durbin-Wu-Hausman residual inclusion","RateVulnerability_z","Z_precovid_2Y_z",1.00709071504817,0.286020098960684,FALSE,49
+"return_equation_system_IV_set","Durbin-Wu-Hausman residual inclusion","RateVulnerability_z","Z_precovid_2Y_z; Z_early_nonoverlap_2Y_z; Z_verylong_2Y_z",0.844342332959775,0.355371747580708,FALSE,49
+"vulnerability_equation_exploratory","Durbin-Wu-Hausman residual inclusion","CAR_3day","MktBeta_z; SMBBeta_z; HMLBeta_z; RMWBeta_z; CMABeta_z; HistVol_z; PreMomentum_z",-0.243148940999761,0.00133532163990244,TRUE,49

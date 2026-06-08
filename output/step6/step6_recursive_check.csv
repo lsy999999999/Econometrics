@@ -1,0 +1,5 @@
+"condition","result","note"
+"one_way_time_order_RV_before_CAR",1,"The main empirical design constructs RV from pre-event historical windows."
+"contemporaneous_reverse_CAR_determines_historical_RV",0,"Same-event CAR cannot literally determine a historical RV estimate."
+"structural_error_independence_required_for_recursive_OLS",1,"A recursive system needs one-way ordering and uncorrelated structural errors."
+"residual_correlation_proxy",0.0614793191263618,"OLS residual correlation = -0.061, p = 0.675."

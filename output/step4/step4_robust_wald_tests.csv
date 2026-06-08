@@ -1,0 +1,3 @@
+"test","vcov_type","terms","chi_square","chi_square_df","chi_square_p","F_statistic","F_df1","F_df2","F_p_value"
+"OLS M2 controls jointly zero","HC3","MktBeta_z ; SMBBeta_z ; HMLBeta_z ; RMWBeta_z ; CMABeta_z ; HistVol_z ; PreMomentum_z",32.6791546926639,7,3.03795915935903e-05,4.66845067038055,7,40,0.000676870561871373
+"OLS M2 Fama-French style betas jointly zero","HC3","SMBBeta_z ; HMLBeta_z ; RMWBeta_z ; CMABeta_z",14.0974066235954,4,0.0069905760704386,3.52435165589886,4,40,0.014821514940558

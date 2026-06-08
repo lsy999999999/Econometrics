@@ -1,0 +1,24 @@
+Step 1: Simple cross-sectional OLS
+Event date: 2022-11-02 
+Event window: [-1,+1] trading days around event date
+Estimation window: 260 to 30 trading days before event
+
+
+Call:
+lm(formula = CAR ~ RateVulnerability_z, data = results)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-6.7600 -1.2276  0.0234  1.3890  7.5197 
+
+Coefficients:
+                    Estimate Std. Error t value Pr(>|t|)    
+(Intercept)          -2.7314     0.3929  -6.951 9.69e-09 ***
+RateVulnerability_z  -1.1334     0.3970  -2.855  0.00639 ** 
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 2.751 on 47 degrees of freedom
+Multiple R-squared:  0.1478,	Adjusted R-squared:  0.1297 
+F-statistic: 8.151 on 1 and 47 DF,  p-value: 0.006386
+

@@ -1,0 +1,4 @@
+"item","lecture6_point","implementation"
+"2SLS_R2","The ordinary R-squared from a 2SLS structural equation can be negative.","Step 6 does not use ordinary 2SLS R-squared for conclusions."
+"2SLS_ordinary_F","The usual OLS-style overall F statistic is not generally valid for 2SLS.","Step 6 does not use ordinary OLS F statistics for 2SLS model fit."
+"recommended_inference","Use coefficient tests, IV first-stage diagnostics, DWH, overidentification tests, and Wald-style restrictions.","Model comparison reports key coefficients and diagnostic files."

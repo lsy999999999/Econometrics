@@ -1,0 +1,11 @@
+Step 4 fixes the Step 3 M2 full-controls model and focuses on inference under possible heteroskedasticity.
+In this cross-section, industry portfolios differ in pre-event volatility and macro sensitivity, so homoskedasticity is not guaranteed.
+The main benchmark remains OLS point estimates with heteroskedasticity-robust standard errors, especially HC3 because N = 49 is small.
+WLS uses 1 / HistVol^2 as an economically interpretable precision weight; it is treated as a robustness check, not the main model.
+FGLS estimates log residual variance using RateVulnerability_z, HistVol_z, and PreMomentum_z, then applies 1 / h_hat weights.
+FGLS-White estimates log residual variance using fitted values and fitted values squared, matching the modified White diagnostic logic.
+Groupwise WLS uses rate-vulnerability quartile residual variances as weights, matching the residual variance plot.
+If WLS/FGLS post-tests still suggest heteroskedasticity, use robust WLS/FGLS standard errors and do not replace the OLS-HC conclusion.
+Gold is the largest influence point, but it has clear economic meaning in a monetary-policy event setting and should not be mechanically removed.
+Excluding Gold or the top three Cook's-distance industries keeps the coefficient negative but weakens statistical significance, so the paper should report influence sensitivity transparently.
+The influence conclusion is: sign robustness is strong, but HC3 statistical significance is sensitive to high-influence industries.

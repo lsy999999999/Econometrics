@@ -1,0 +1,2 @@
+"test","terms","statistic","df","p_value","covariance","reference_distribution"
+"M3_full HC1 robust Wald: industry-group slope interactions jointly zero","RateVulnerability_z:TechGrowth ; RateVulnerability_z:Finance ; RateVulnerability_z:Defensive",15.7142973520797,3,0.00129763653583799,"HC1","Chi-square"

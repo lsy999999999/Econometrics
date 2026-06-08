@@ -1,0 +1,5 @@
+"item","estimate","note"
+"reduced_form_CAR_on_Z",-0.661501900737811,"Reduced form: external predetermined variable to endogenous CAR."
+"reduced_form_RV_on_Z",0.658288054777065,"Reduced form: external predetermined variable to endogenous RV."
+"ILS_Wald_ratio_no_controls",-1.00488212711354,"Teaching-only ILS/Wald ratio in a just-identified no-control simplification."
+"2SLS_no_controls_same_IV",-1.00488212711354,"Matches the just-identified IV estimate in the same no-control simplification."

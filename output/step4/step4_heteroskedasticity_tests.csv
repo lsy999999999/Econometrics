@@ -1,0 +1,8 @@
+"test","statistic","df","p_value","method"
+"OLS M2 Breusch-Pagan: u^2 on all regressors",8.95048108491856,8,0.346490541073767,"LM = n * auxiliary R-squared"
+"OLS M2 modified White: u^2 on fitted and fitted^2",3.263722267597,2,0.195565262096252,"LM = n * auxiliary R-squared"
+"OLS M2 full White: u^2 on regressors, squares, and interactions",48.1080299623897,44,0.310090374027315,"LM = n * auxiliary R-squared"
+"WLS modified White: u^2 on fitted and fitted^2",2.8601107659128,2,0.239295668975154,"LM = n * auxiliary R-squared"
+"FGLS modified White: u^2 on fitted and fitted^2",2.63135261271701,2,0.26829281373227,"LM = n * auxiliary R-squared"
+"FGLS-White post-test: u^2 on fitted and fitted^2",3.87389880427731,2,0.144143002085086,"LM = n * auxiliary R-squared"
+"Group-WLS post-test: u^2 on fitted and fitted^2",1.55844069249505,2,0.458763548631642,"LM = n * auxiliary R-squared"

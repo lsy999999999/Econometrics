@@ -1,0 +1,7 @@
+"test","statistic","df","p_value","note","test_type"
+"Sargan overidentification: precovid_plus_verylong",1.86967199888875,1,0.17151265060751,"Tests joint validity of overidentifying restrictions under homoskedasticity.","Sargan"
+"Hansen-style J overidentification: precovid_plus_verylong",1.58305508182106,1,0.208321181900674,"Robust moment-based J using 2SLS residuals; interpret cautiously in N = 49.","Hansen_style_J"
+"Sargan overidentification: precovid_plus_early_nonoverlap",1.98750552895227,1,0.158601942782223,"Tests joint validity of overidentifying restrictions under homoskedasticity.","Sargan"
+"Hansen-style J overidentification: precovid_plus_early_nonoverlap",1.39989615440553,1,0.236740958545158,"Robust moment-based J using 2SLS residuals; interpret cautiously in N = 49.","Hansen_style_J"
+"Sargan overidentification: precovid_plus_termspread",2.19962644642766,1,0.138044186841825,"Tests joint validity of overidentifying restrictions under homoskedasticity.","Sargan"
+"Hansen-style J overidentification: precovid_plus_termspread",2.57373861810505,1,0.108650678957335,"Robust moment-based J using 2SLS residuals; interpret cautiously in N = 49.","Hansen_style_J"

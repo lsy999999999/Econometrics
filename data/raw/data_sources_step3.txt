@@ -1,0 +1,17 @@
+Fama-French 49 Industry Portfolios Daily:
+https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/49_Industry_Portfolios_daily_CSV.zip
+
+Fama-French Research Data 5 Factors (2x3) Daily:
+https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/F-F_Research_Data_5_Factors_2x3_daily_CSV.zip
+
+Federal Reserve H.15 selected interest rates download page:
+https://www.federalreserve.gov/datadownload/Choose.aspx?rel=H15
+
+Current local H.15 direct package used by user:
+https://www.federalreserve.gov/datadownload/Download.aspx?rel=H15&series=bf17364827e38702b42a58cf8eaa3f78&lastobs=&from=&to=&filetype=csv&label=include&layout=seriescolumn&type=package
+
+FOMC calendar and statements:
+https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm
+
+2022-11-02 FOMC statement:
+https://www.federalreserve.gov/newsevents/pressreleases/monetary20221102a.htm

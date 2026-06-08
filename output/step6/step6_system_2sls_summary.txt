@@ -1,0 +1,69 @@
+
+systemfit results 
+method: 2SLS 
+
+        N DF     SSR detRCov   OLS-R2 McElroy-R2
+system 98 84 219.886 3.19093 0.527372   0.481562
+
+          N DF      SSR     MSE     RMSE       R2   Adj R2
+returnEq 49 40 189.3780 4.73445 2.175879 0.546119 0.455343
+vulnEq   49 44  30.5083 0.69337 0.832688 0.364411 0.306630
+
+The covariance matrix of the residuals
+          returnEq    vulnEq
+returnEq  4.734449 -0.302976
+vulnEq   -0.302976  0.693370
+
+The correlations of the residuals
+          returnEq    vulnEq
+returnEq  1.000000 -0.167221
+vulnEq   -0.167221  1.000000
+
+
+2SLS estimates for 'returnEq' (equation 1)
+Model Formula: CAR_3day ~ RateVulnerability_z + MktBeta_z + SMBBeta_z + HMLBeta_z + 
+    RMWBeta_z + CMABeta_z + HistVol_z + PreMomentum_z
+Instruments: ~Z_precovid_2Y_z + Z_early_nonoverlap_2Y_z + Z_verylong_2Y_z + 
+    MktBeta_z + SMBBeta_z + HMLBeta_z + RMWBeta_z + CMABeta_z + 
+    HistVol_z + PreMomentum_z
+
+                     Estimate Std. Error  t value   Pr(>|t|)    
+(Intercept)         -2.731429   0.310840 -8.78725 7.0001e-11 ***
+RateVulnerability_z -1.663669   0.754059 -2.20628  0.0331691 *  
+MktBeta_z           -0.705963   0.726176 -0.97216  0.3368111    
+SMBBeta_z            2.047921   0.579275  3.53532  0.0010461 ** 
+HMLBeta_z            0.449600   0.468144  0.96039  0.3426295    
+RMWBeta_z           -1.221703   0.791245 -1.54403  0.1304575    
+CMABeta_z            0.135454   0.431695  0.31377  0.7553246    
+HistVol_z           -1.467436   0.808987 -1.81392  0.0771970 .  
+PreMomentum_z        1.413140   0.516904  2.73386  0.0092797 ** 
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 2.175879 on 40 degrees of freedom
+Number of observations: 49 Degrees of Freedom: 40 
+SSR: 189.377966 MSE: 4.734449 Root MSE: 2.175879 
+Multiple R-Squared: 0.546119 Adjusted R-Squared: 0.455343 
+
+
+2SLS estimates for 'vulnEq' (equation 2)
+Model Formula: RateVulnerability_z ~ CAR_3day + Z_precovid_2Y_z + Z_early_nonoverlap_2Y_z + 
+    Z_verylong_2Y_z
+Instruments: ~Z_precovid_2Y_z + Z_early_nonoverlap_2Y_z + Z_verylong_2Y_z + 
+    MktBeta_z + SMBBeta_z + HMLBeta_z + RMWBeta_z + CMABeta_z + 
+    HistVol_z + PreMomentum_z
+
+                          Estimate Std. Error  t value  Pr(>|t|)   
+(Intercept)              0.4545143  0.2044195  2.22344 0.0313684 * 
+CAR_3day                 0.1664017  0.0608632  2.73403 0.0089798 **
+Z_precovid_2Y_z          0.8778859  0.3562883  2.46398 0.0177192 * 
+Z_early_nonoverlap_2Y_z  0.1871792  0.2407240  0.77757 0.4409848   
+Z_verylong_2Y_z         -0.2331807  0.4633829 -0.50321 0.6173239   
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.832688 on 44 degrees of freedom
+Number of observations: 49 Degrees of Freedom: 44 
+SSR: 30.508259 MSE: 0.69337 Root MSE: 0.832688 
+Multiple R-Squared: 0.364411 Adjusted R-Squared: 0.30663 
+

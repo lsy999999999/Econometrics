@@ -1,0 +1,4 @@
+"model","specification","coefficient","p_value","R_squared"
+"M0_simple","RateVulnerability only",0.0162012935306074,0.970107843433955,3.01962502758958e-05
+"M1_basic_controls","Add market beta, historical volatility, pre-momentum",-0.267665222148688,0.532237797307232,0.360921377962551
+"M2_full_controls","Add Fama-French style betas",-1.09788237897484,0.0133007817551305,0.565482564138578

@@ -1,0 +1,4 @@
+"test","coefficient_resid","p_value","N"
+"DWH residual inclusion: IV_one_presample_2Y",-0.777291145312112,0.547374209710824,49
+"DWH residual inclusion: IV_two_presample_2Y_10Y",-0.27625056829488,0.822981763231394,49
+"DWH residual inclusion: IV_simple_presample_2Y",1.91129040874357,0.170151660116541,49

@@ -1,0 +1,8 @@
+"IV","construction","target_endogenous_variable","intended_use"
+"Z_recent_nonoverlap_2Y_z","event -520 to -261 trading days, factor-adjusted 2Y sensitivity","RateVulnerability_z","pre-determined non-overlapping historical rate-exposure IV"
+"Z_early_nonoverlap_2Y_z","event -760 to -521 trading days, factor-adjusted 2Y sensitivity","RateVulnerability_z","pre-determined non-overlapping historical rate-exposure IV"
+"Z_verylong_2Y_z","event -1500 to -521 trading days, factor-adjusted 2Y sensitivity","RateVulnerability_z","pre-determined non-overlapping historical rate-exposure IV"
+"Z_precovid_2Y_z","calendar 2017-2019, factor-adjusted 2Y sensitivity","RateVulnerability_z","pre-determined non-overlapping historical rate-exposure IV"
+"Z_termspread_z","event -520 to -261 trading days, factor-adjusted 10Y-2Y term-spread sensitivity","RateVulnerability_z","pre-determined non-overlapping historical rate-exposure IV"
+"RV_early_2Y_z","split-half early window, event -520 to -391 trading days","RateVulnerability_z","split-sample measurement-error IV"
+"RV_late_2Y_z","split-half late window, event -390 to -261 trading days","RateVulnerability_z","split-sample measurement-error IV"
