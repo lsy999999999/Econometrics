@@ -1,0 +1,8 @@
+"equation","variable_group","variables","econometric_meaning","main_or_exploratory"
+"main_return_equation","dependent endogenous variable","CAR_3day","FOMC 事件窗口行业收益，是主结构方程的被解释变量。","main"
+"main_return_equation","endogenous RHS variable","RateVulnerability_z","核心解释变量，可能与遗漏行业特征相关，因此作为潜在内生解释变量处理。","main"
+"main_return_equation","included exogenous controls","MktBeta_z; SMBBeta_z; HMLBeta_z; RMWBeta_z; CMABeta_z; HistVol_z; PreMomentum_z","进入收益方程的控制变量，用于控制行业资产定价特征、历史风险和事件前动量。","main"
+"main_return_equation","excluded exogenous instruments","Z_precovid_2Y_z; Z_early_nonoverlap_2Y_z; Z_verylong_2Y_z","不直接进入主收益方程、但解释 RateVulnerability_z 的事件前历史暴露变量。","main"
+"exploratory_vulnerability_equation","dependent endogenous variable","RateVulnerability_z","探索性反向方程的被解释变量；由于它来自历史窗口，该方程不作为主结论。","exploratory"
+"exploratory_vulnerability_equation","endogenous RHS variable","CAR_3day","探索性反向方程的右侧内生变量；时间顺序上不能解释为 CAR 决定历史 RV。","exploratory"
+"exploratory_vulnerability_equation","excluded exogenous instruments, questionable","MktBeta_z; SMBBeta_z; HMLBeta_z; RMWBeta_z; CMABeta_z; HistVol_z; PreMomentum_z","这些变量机械上可以帮助识别反向方程，但经济上很可能直接影响 RV，因此排除限制较弱。","exploratory"

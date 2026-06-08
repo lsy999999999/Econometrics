@@ -1,0 +1,11 @@
+"concept","lecture6_definition","this_project_mapping","use_in_main_text"
+"结构方程 structural equation","联立方程模型中的单个方程，每个方程应具有其他条件不变下的合理经济解释。","主结构方程是收益方程：CAR_3day = alpha0 + alpha1 RateVulnerability_z + controls + u1。",TRUE
+"结构系数 structural coefficient","结构方程中的参数，反映系统内部变量之间的结构性关系。","核心结构系数是 alpha1，即 RateVulnerability_z 对 CAR_3day 的影响。",TRUE
+"结构误差 structural error","结构方程中的扰动项，表示结构方程未解释的部分；不同结构误差之间可能相关。","收益方程中的 u1 是无法观测的行业冲击、风险偏好变化、遗漏行业特征等。",TRUE
+"内生变量 endogenous variable","由联立方程模型所描述的经济系统自身决定的变量；既可以作被解释变量，也可以作解释变量。","探索性 SEM 中，CAR_3day 与 RateVulnerability_z 被放入系统内讨论；但主模型中 CAR_3day 是结果变量，RateVulnerability_z 是潜在内生解释变量。",TRUE
+"外生变量 exogenous variable","由联立方程模型所描述的经济系统之外决定的变量；影响系统中的内生变量，但不受系统内变量影响。","Z_precovid_2Y_z、Z_early_nonoverlap_2Y_z、Z_verylong_2Y_z、Z_termspread_z 以及控制变量可被视为系统外给定变量；但其外生性需要经济论证。",TRUE
+"前定变量 predetermined variable","滞后的内生变量或滞后的外生变量；在联立方程识别中通常作为外生变量处理。","Z_precovid_2Y_z、Z_early_nonoverlap_2Y_z、Z_verylong_2Y_z 来自事件前历史窗口，因此更适合作为前定变量。",TRUE
+"右侧内生变量 endogenous RHS variable","出现在某个结构方程右侧、但可能与该方程结构误差相关的变量；若不处理，OLS 可能不一致。","主收益方程中的 RateVulnerability_z 是右侧内生变量，因为它可能与遗漏的行业久期、融资约束、避险属性等进入误差项的因素相关。",TRUE
+"被排除外生变量 excluded exogenous variable","没有进入该结构方程、但用于识别右侧内生变量的外生变量；也就是工具变量的来源。","主收益方程中，被排除外生变量是历史窗口利率暴露度，如 Z_precovid_2Y_z 和 Z_early_nonoverlap_2Y_z。",TRUE
+"约简型方程 reduced-form equation","用外生变量表示内生变量的方程；在 2SLS 第一阶段中体现为内生解释变量对工具变量和控制变量的回归。","第一阶段方程：RateVulnerability_z = pi0 + pi1 Z + controls + v，是主收益方程的约简型/第一阶段近似。",TRUE
+"探索性联立系统 exploratory SEM","为了展示第六讲联立方程思想而构造的两方程系统；若经济解释或排除限制不足，则不作为主识别结果。","CAR_3day <-> RateVulnerability_z 的完整双向系统只作为探索性模块；由于 CAR_3day 发生在历史 RV 之后，不能作为主识别。",FALSE

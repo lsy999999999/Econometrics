@@ -722,3 +722,141 @@ result_lines <- c(
 writeLines(result_lines, file.path(out_dir, "step6_results_summary.md"))
 
 message("Step 6 complete. Outputs written to ", out_dir)
+
+
+write.csv(variable_roles, file.path(out_dir, "step6_sem_variable_roles.csv"), row.names = FALSE)
+
+# ------------------------------------------------------------
+# Step 6: Lecture 6 concept definitions and empirical mapping
+# ------------------------------------------------------------
+
+concept_definitions <- data.frame(
+  concept = c(
+    "结构方程 structural equation",
+    "结构系数 structural coefficient",
+    "结构误差 structural error",
+    "内生变量 endogenous variable",
+    "外生变量 exogenous variable",
+    "前定变量 predetermined variable",
+    "右侧内生变量 endogenous RHS variable",
+    "被排除外生变量 excluded exogenous variable",
+    "约简型方程 reduced-form equation",
+    "探索性联立系统 exploratory SEM"
+  ),
+  lecture6_definition = c(
+    "联立方程模型中的单个方程，每个方程应具有其他条件不变下的合理经济解释。",
+    "结构方程中的参数，反映系统内部变量之间的结构性关系。",
+    "结构方程中的扰动项，表示结构方程未解释的部分；不同结构误差之间可能相关。",
+    "由联立方程模型所描述的经济系统自身决定的变量；既可以作被解释变量，也可以作解释变量。",
+    "由联立方程模型所描述的经济系统之外决定的变量；影响系统中的内生变量，但不受系统内变量影响。",
+    "滞后的内生变量或滞后的外生变量；在联立方程识别中通常作为外生变量处理。",
+    "出现在某个结构方程右侧、但可能与该方程结构误差相关的变量；若不处理，OLS 可能不一致。",
+    "没有进入该结构方程、但用于识别右侧内生变量的外生变量；也就是工具变量的来源。",
+    "用外生变量表示内生变量的方程；在 2SLS 第一阶段中体现为内生解释变量对工具变量和控制变量的回归。",
+    "为了展示第六讲联立方程思想而构造的两方程系统；若经济解释或排除限制不足，则不作为主识别结果。"
+  ),
+  this_project_mapping = c(
+    "主结构方程是收益方程：CAR_3day = alpha0 + alpha1 RateVulnerability_z + controls + u1。",
+    "核心结构系数是 alpha1，即 RateVulnerability_z 对 CAR_3day 的影响。",
+    "收益方程中的 u1 是无法观测的行业冲击、风险偏好变化、遗漏行业特征等。",
+    "探索性 SEM 中，CAR_3day 与 RateVulnerability_z 被放入系统内讨论；但主模型中 CAR_3day 是结果变量，RateVulnerability_z 是潜在内生解释变量。",
+    "Z_precovid_2Y_z、Z_early_nonoverlap_2Y_z、Z_verylong_2Y_z、Z_termspread_z 以及控制变量可被视为系统外给定变量；但其外生性需要经济论证。",
+    "Z_precovid_2Y_z、Z_early_nonoverlap_2Y_z、Z_verylong_2Y_z 来自事件前历史窗口，因此更适合作为前定变量。",
+    "主收益方程中的 RateVulnerability_z 是右侧内生变量，因为它可能与遗漏的行业久期、融资约束、避险属性等进入误差项的因素相关。",
+    "主收益方程中，被排除外生变量是历史窗口利率暴露度，如 Z_precovid_2Y_z 和 Z_early_nonoverlap_2Y_z。",
+    "第一阶段方程：RateVulnerability_z = pi0 + pi1 Z + controls + v，是主收益方程的约简型/第一阶段近似。",
+    "CAR_3day <-> RateVulnerability_z 的完整双向系统只作为探索性模块；由于 CAR_3day 发生在历史 RV 之后，不能作为主识别。"
+  ),
+  use_in_main_text = c(
+    TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, FALSE
+  ),
+  row.names = NULL
+)
+
+write.csv(
+  concept_definitions,
+  file.path(out_dir, "step6_concept_definitions.csv"),
+  row.names = FALSE
+)
+
+equation_variable_map <- data.frame(
+  equation = c(
+    "main_return_equation",
+    "main_return_equation",
+    "main_return_equation",
+    "main_return_equation",
+    "exploratory_vulnerability_equation",
+    "exploratory_vulnerability_equation",
+    "exploratory_vulnerability_equation"
+  ),
+  variable_group = c(
+    "dependent endogenous variable",
+    "endogenous RHS variable",
+    "included exogenous controls",
+    "excluded exogenous instruments",
+    "dependent endogenous variable",
+    "endogenous RHS variable",
+    "excluded exogenous instruments, questionable"
+  ),
+  variables = c(
+    "CAR_3day",
+    "RateVulnerability_z",
+    paste(controls_return, collapse = "; "),
+    paste(historical_ivs, collapse = "; "),
+    "RateVulnerability_z",
+    "CAR_3day",
+    paste(reverse_excluded, collapse = "; ")
+  ),
+  econometric_meaning = c(
+    "FOMC 事件窗口行业收益，是主结构方程的被解释变量。",
+    "核心解释变量，可能与遗漏行业特征相关，因此作为潜在内生解释变量处理。",
+    "进入收益方程的控制变量，用于控制行业资产定价特征、历史风险和事件前动量。",
+    "不直接进入主收益方程、但解释 RateVulnerability_z 的事件前历史暴露变量。",
+    "探索性反向方程的被解释变量；由于它来自历史窗口，该方程不作为主结论。",
+    "探索性反向方程的右侧内生变量；时间顺序上不能解释为 CAR 决定历史 RV。",
+    "这些变量机械上可以帮助识别反向方程，但经济上很可能直接影响 RV，因此排除限制较弱。"
+  ),
+  main_or_exploratory = c(
+    "main", "main", "main", "main",
+    "exploratory", "exploratory", "exploratory"
+  ),
+  row.names = NULL
+)
+
+write.csv(
+  equation_variable_map,
+  file.path(out_dir, "step6_equation_variable_map.csv"),
+  row.names = FALSE
+)
+
+concept_md <- c(
+  "# Step 6：第六讲概念定义与本文变量对应关系",
+  "",
+  "## 1. 为什么需要单独定义内生变量和外生变量？",
+  "",
+  "第六讲的联立方程模型不是普通多元回归。它关注的是系统内部变量相互影响、共同决定的问题。因此，在估计之前必须说明哪些变量是系统内生决定的，哪些变量是系统外部给定的，哪些变量虽然出现在右侧但可能与结构误差相关。",
+  "",
+  "## 2. 本文主收益结构方程",
+  "",
+  "`CAR_3day = alpha0 + alpha1 RateVulnerability_z + controls + u1`",
+  "",
+  "- `CAR_3day`：主结构方程的被解释变量，也是探索性 SEM 中的内生变量。",
+  "- `RateVulnerability_z`：主收益方程的右侧内生变量，因为它可能与遗漏行业特征相关。",
+  paste0("- included exogenous controls：", paste(controls_return, collapse = ", "), "。"),
+  paste0("- excluded exogenous instruments：", paste(historical_ivs, collapse = ", "), "。"),
+  "",
+  "## 3. 探索性反向方程",
+  "",
+  "`RateVulnerability_z = gamma0 + gamma1 CAR_3day + historical_IVs + u2`",
+  "",
+  "这个方程只用于展示第六讲中双向或联立系统的概念，不作为主识别。原因是 `RateVulnerability_z` 是事件前历史窗口估计得到的行业利率脆弱度，而 `CAR_3day` 是 FOMC 事件窗口的收益反应；从时间顺序看，当期 CAR 不能反过来决定历史 RV。",
+  "",
+  "## 4. 结论",
+  "",
+  "本文主结论仍应基于收益结构方程的 OLS-HC3、2SLS 辅助检验和稳健性结果。完整 `CAR_3day <-> RateVulnerability_z` 联立系统只作为第六讲教学性和探索性模块。"
+)
+
+writeLines(
+  concept_md,
+  file.path(out_dir, "step6_concept_definitions.md")
+)
