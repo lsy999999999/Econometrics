@@ -1,0 +1,4 @@
+"equation","method","term","estimate","standard_error","statistic","p_value","N"
+"demand_affordability","2SLS_manual_HC3","(Intercept)",4.54181005009583,0.377519853641374,12.0306521797138,2.00506637051557e-27,300
+"demand_affordability","2SLS_manual_HC3","affordability_pressure",0.2623223195664,0.0352121966222432,7.4497573207544,1.02467395814906e-12,300
+"demand_affordability","2SLS_manual_HC3","unrate",-0.0373319917164856,0.0206721340113451,-1.80590894466905,0.0719448924365718,300

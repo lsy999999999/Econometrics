@@ -1,0 +1,9 @@
+"model","test","statistic","p_value"
+"demand_ols","Durbin_Watson_stat",0.105776871212234,NA
+"demand_ols","Breusch_Godfrey_LM_order12",259.820599598686,1.22072763388815e-48
+"supply_ols","Durbin_Watson_stat",0.642865735904254,NA
+"supply_ols","Breusch_Godfrey_LM_order12",149.721658584949,6.45707855995073e-26
+"demand_2sls","Durbin_Watson_stat",0.105834988492219,NA
+"demand_2sls","Breusch_Godfrey_LM_order12",259.852323268039,1.20224532732781e-48
+"supply_2sls","Durbin_Watson_stat",0.64537558508226,NA
+"supply_2sls","Breusch_Godfrey_LM_order12",149.958603477605,5.78056457037232e-26

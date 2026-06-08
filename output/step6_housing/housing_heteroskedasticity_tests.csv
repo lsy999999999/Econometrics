@@ -1,0 +1,5 @@
+"model","test","statistic","df","p_value"
+"demand_ols","White_style_BP_on_fitted",149.073873941975,2,4.25617597126252e-33
+"supply_ols","White_style_BP_on_fitted",7.64678779457947,2,0.0218535063356011
+"demand_2sls","White_style_BP_on_fitted",149.969353134582,2,2.71999896967716e-33
+"supply_2sls","White_style_BP_on_fitted",8.52520409290647,2,0.0140856032903797

@@ -17,11 +17,13 @@ options(timeout = 180)
 series_info <- data.frame(
   series_id = c(
     "HSN1F", "MSPNHSUS", "MORTGAGE30US", "DSPIC96",
-    "UNRATE", "PERMIT", "MSACSR", "WPUSI012011"
+    "UNRATE", "PERMIT", "MSACSR", "WPUSI012011",
+    "HOUST", "UNDCONTSA"
   ),
   variable = c(
     "sales", "price", "mortgage_rate", "income",
-    "unrate", "permit", "months_supply", "construction_cost"
+    "unrate", "permit", "months_supply", "construction_cost",
+    "housing_starts", "under_construction"
   ),
   description = c(
     "New one-family houses sold, United States",
@@ -31,18 +33,22 @@ series_info <- data.frame(
     "Unemployment rate",
     "New privately owned housing units authorized by building permits",
     "Monthly supply of new houses",
-    "PPI special index: construction materials"
+    "PPI special index: construction materials",
+    "New privately owned housing units started",
+    "New privately owned housing units under construction"
   ),
-  frequency = c("monthly", "monthly", "weekly_to_monthly_mean", "monthly", "monthly", "monthly", "monthly", "monthly"),
-  transformation = c("log", "log", "monthly mean, level", "log", "level", "log", "level", "log"),
+  frequency = c("monthly", "monthly", "weekly_to_monthly_mean", "monthly", "monthly", "monthly", "monthly", "monthly", "monthly", "monthly"),
+  transformation = c("log", "log", "monthly mean, level", "log", "level", "log", "level", "log", "log", "log"),
   equation_role = c(
     "endogenous quantity", "endogenous price", "demand shifter",
     "demand shifter", "demand shifter", "supply shifter",
-    "supply shifter", "supply shifter"
+    "supply shifter", "supply shifter", "clean supply shifter",
+    "clean supply shifter"
   ),
   source_url = paste0("https://fred.stlouisfed.org/series/", c(
     "HSN1F", "MSPNHSUS", "MORTGAGE30US", "DSPIC96",
-    "UNRATE", "PERMIT", "MSACSR", "WPUSI012011"
+    "UNRATE", "PERMIT", "MSACSR", "WPUSI012011",
+    "HOUST", "UNDCONTSA"
   )),
   row.names = NULL
 )
@@ -112,10 +118,15 @@ df$log_price <- log(df$price)
 df$log_income <- log(df$income)
 df$log_permit <- log(df$permit)
 df$log_construction_cost <- log(df$construction_cost)
+df$log_starts <- log(df$housing_starts)
+df$log_under_construction <- log(df$under_construction)
+df$trend <- seq_len(nrow(df))
+df$trend2 <- df$trend^2
 df$month <- factor(format(df$date, "%m"))
 df <- df[complete.cases(df[, c(
   "log_sales", "log_price", "mortgage_rate", "log_income", "unrate",
-  "log_permit", "months_supply", "log_construction_cost"
+  "log_permit", "months_supply", "log_construction_cost",
+  "log_starts", "log_under_construction"
 )]), ]
 write.csv(df, file.path(out_dir, "housing_sem_clean.csv"), row.names = FALSE)
 
@@ -448,6 +459,278 @@ robust_results[[5]] <- data.frame(
 robustness_summary <- do.call(rbind, robust_results)
 write.csv(robustness_summary, file.path(out_dir, "housing_robustness_summary.csv"), row.names = FALSE)
 
+lag_vec <- function(x, k) c(rep(NA_real_, k), head(x, -k))
+diff_lag <- function(x, k) x - lag_vec(x, k)
+
+for (v in c("log_sales", "log_price", "mortgage_rate", "log_income", "unrate",
+            "log_permit", "months_supply", "log_construction_cost",
+            "log_starts", "log_under_construction")) {
+  df[[paste0("L1_", v)]] <- lag_vec(df[[v]], 1)
+  df[[paste0("L3_", v)]] <- lag_vec(df[[v]], 3)
+  df[[paste0("L6_", v)]] <- lag_vec(df[[v]], 6)
+  df[[paste0("d1_", v)]] <- diff_lag(df[[v]], 1)
+  df[[paste0("d12_", v)]] <- diff_lag(df[[v]], 12)
+}
+df$affordability_pressure <- df$log_price - df$log_income + df$mortgage_rate
+df$gfc <- as.integer(df$date >= as.Date("2007-12-01") & df$date <= as.Date("2009-06-01"))
+df$covid <- as.integer(df$date >= as.Date("2020-03-01") & df$date <= as.Date("2021-12-01"))
+df$high_rate <- as.integer(df$date >= as.Date("2022-03-01"))
+
+cycle_vars <- c("log_sales", "log_price", "log_income", "log_permit", "log_construction_cost", "log_starts")
+for (v in cycle_vars) {
+  df[[paste0(v, "_cycle")]] <- resid(lm(as.formula(paste(v, "~ trend + trend2")), data = df))
+}
+
+iv_price_row <- function(tab, term = "log_price") {
+  row <- tab[tab$term == term, ][1, ]
+  if (nrow(row) == 0) return(data.frame(estimate = NA_real_, p_value = NA_real_))
+  data.frame(estimate = row$estimate, p_value = row$p_value)
+}
+
+fit_pair <- function(data, model, sample_name, transformation, demand_incl, demand_excl,
+                     supply_incl, supply_excl, y = "log_sales", x = "log_price") {
+  needed <- unique(c(y, x, demand_incl, demand_excl, supply_incl, supply_excl))
+  d <- data[complete.cases(data[, needed]), ]
+  if (nrow(d) < 40) return(NULL)
+  dfit <- manual_2sls(d, y, x, demand_incl, demand_excl)
+  sfit <- manual_2sls(d, y, x, supply_incl, supply_excl)
+  dfs <- first_stage_relevance(d, paste0(model, "_demand"), x, demand_incl, demand_excl)
+  sfs <- first_stage_relevance(d, paste0(model, "_supply"), x, supply_incl, supply_excl)
+  dov <- rbind(sargan_test(dfit, paste0(model, "_demand"), paste(demand_excl, collapse = "; ")),
+               hansen_j_test(dfit, paste0(model, "_demand"), paste(demand_excl, collapse = "; ")))
+  sov <- rbind(sargan_test(sfit, paste0(model, "_supply"), paste(supply_excl, collapse = "; ")),
+               hansen_j_test(sfit, paste0(model, "_supply"), paste(supply_excl, collapse = "; ")))
+  ddwh <- dwh_test(d, paste0(model, "_demand"), y, x, demand_incl, demand_excl)
+  sdwh <- dwh_test(d, paste0(model, "_supply"), y, x, supply_incl, supply_excl)
+  dtab <- iv_table(dfit, paste0(model, "_demand"), "2SLS_manual_HC3")
+  stab <- iv_table(sfit, paste0(model, "_supply"), "2SLS_manual_HC3")
+  dprice <- iv_price_row(dtab, x)
+  sprice <- iv_price_row(stab, x)
+  grid <- data.frame(
+    model = model,
+    sample = sample_name,
+    transformation = transformation,
+    IV_set = c("demand_excluded_supply_shifters", "supply_excluded_demand_shifters"),
+    equation = c("demand", "supply"),
+    first_stage_F = c(dfs$first_stage_F, sfs$first_stage_F),
+    partial_R2 = c(dfs$partial_R2, sfs$partial_R2),
+    overid_min_p = c(min(dov$p_value, na.rm = TRUE), min(sov$p_value, na.rm = TRUE)),
+    DWH_p = c(ddwh$p_value, sdwh$p_value),
+    price_coef = c(dprice$estimate, sprice$estimate),
+    price_p = c(dprice$p_value, sprice$p_value),
+    price_sign_ok = c(dprice$estimate < 0, sprice$estimate > 0),
+    price_sig_10pct = c(dprice$p_value < 0.10, sprice$p_value < 0.10),
+    N = nrow(d),
+    row.names = NULL
+  )
+  list(demand_fit = dfit, supply_fit = sfit, demand_table = dtab, supply_table = stab,
+       first_stage = rbind(dfs, sfs), overid = rbind(dov, sov), dwh = rbind(ddwh, sdwh),
+       grid = grid)
+}
+
+clean_supply_ivs <- c("log_permit", "log_construction_cost", "log_starts", "log_under_construction")
+clean_demand_ivs_A <- c("mortgage_rate", "unrate")
+clean_demand_ivs_B <- c("mortgage_rate", "log_income", "unrate")
+
+baseline_pair <- fit_pair(df, "levels_baseline", "2000_2024", "log_levels",
+                          demand_included, demand_excluded, supply_included, supply_excluded)
+trend_pair <- fit_pair(df, "trend_monthFE", "2000_2024", "log_levels_trend_monthFE",
+                       c(demand_included, "trend", "trend2", "month"), demand_excluded,
+                       c(supply_included, "trend", "trend2", "month"), supply_excluded)
+dynamic_pair <- fit_pair(df, "dynamic_lagY", "2000_2024", "log_levels_L1_sales",
+                         c(demand_included, "L1_log_sales"), demand_excluded,
+                         c(supply_included, "L1_log_sales"), supply_excluded)
+yoy_pair <- fit_pair(df, "yoy_growth", "2000_2024", "year_over_year_change",
+                     c("d12_mortgage_rate", "d12_log_income", "d12_unrate"),
+                     c("d12_log_permit", "d12_log_construction_cost", "d12_log_starts"),
+                     c("d12_log_permit", "d12_months_supply", "d12_log_construction_cost"),
+                     c("d12_mortgage_rate", "d12_log_income", "d12_unrate"),
+                     y = "d12_log_sales", x = "d12_log_price")
+mom_pair <- fit_pair(df, "mom_growth", "2000_2024", "month_over_month_change",
+                     c("d1_mortgage_rate", "d1_log_income", "d1_unrate"),
+                     c("d1_log_permit", "d1_log_construction_cost", "d1_log_starts"),
+                     c("d1_log_permit", "d1_months_supply", "d1_log_construction_cost"),
+                     c("d1_mortgage_rate", "d1_log_income", "d1_unrate"),
+                     y = "d1_log_sales", x = "d1_log_price")
+cycle_pair <- fit_pair(df, "detrended_cycle", "2000_2024", "quadratic_trend_residual",
+                       c("mortgage_rate", "log_income_cycle", "unrate"),
+                       c("log_permit_cycle", "log_construction_cost_cycle", "log_starts_cycle"),
+                       c("log_permit_cycle", "months_supply", "log_construction_cost_cycle"),
+                       c("mortgage_rate", "log_income_cycle", "unrate"),
+                       y = "log_sales_cycle", x = "log_price_cycle")
+clean_pair <- fit_pair(df, "clean_ivset", "2000_2024", "log_levels",
+                       demand_included, clean_supply_ivs, supply_included, clean_demand_ivs_B)
+lagged_iv_pair <- fit_pair(df, "lagged_IV", "2000_2024", "log_levels_lagged_instruments",
+                           demand_included,
+                           c("L1_log_permit", "L3_log_permit", "L1_log_construction_cost", "L3_log_construction_cost", "L1_log_starts", "L3_log_starts"),
+                           supply_included,
+                           c("L1_mortgage_rate", "L3_mortgage_rate", "L1_unrate", "L3_unrate"))
+pre_covid_pair <- fit_pair(df[df$date <= as.Date("2019-12-01"), ], "pre_covid", "2000_2019", "log_levels",
+                           demand_included, clean_supply_ivs, supply_included, clean_demand_ivs_B)
+post_gfc_pre_covid_pair <- fit_pair(df[df$date >= as.Date("2010-01-01") & df$date <= as.Date("2019-12-01"), ],
+                                    "post_gfc_pre_covid", "2010_2019", "log_levels",
+                                    demand_included, clean_supply_ivs, supply_included, clean_demand_ivs_B)
+
+all_pairs <- Filter(Negate(is.null), list(
+  baseline_pair, trend_pair, dynamic_pair, yoy_pair, mom_pair, cycle_pair,
+  clean_pair, lagged_iv_pair, pre_covid_pair, post_gfc_pre_covid_pair
+))
+iv_grid <- do.call(rbind, lapply(all_pairs, function(x) x$grid))
+write.csv(iv_grid, file.path(out_dir, "housing_iv_diagnostic_grid.csv"), row.names = FALSE)
+all_model_2sls <- do.call(rbind, lapply(all_pairs, function(x) rbind(x$demand_table, x$supply_table)))
+write.csv(all_model_2sls, file.path(out_dir, "housing_all_2sls_model_results.csv"), row.names = FALSE)
+write.csv(rbind(baseline_pair$demand_table, baseline_pair$supply_table),
+          file.path(out_dir, "housing_baseline_static_2sls.csv"), row.names = FALSE)
+write.csv(rbind(trend_pair$demand_table, trend_pair$supply_table), file.path(out_dir, "housing_trend_monthfe_2sls.csv"), row.names = FALSE)
+write.csv(rbind(dynamic_pair$demand_table, dynamic_pair$supply_table), file.path(out_dir, "housing_dynamic_lagY_2sls.csv"), row.names = FALSE)
+write.csv(rbind(yoy_pair$demand_table, yoy_pair$supply_table), file.path(out_dir, "housing_yoy_2sls_results.csv"), row.names = FALSE)
+write.csv(yoy_pair$first_stage, file.path(out_dir, "housing_yoy_first_stage.csv"), row.names = FALSE)
+write.csv(yoy_pair$overid, file.path(out_dir, "housing_yoy_overid.csv"), row.names = FALSE)
+write.csv(rbind(mom_pair$demand_table, mom_pair$supply_table), file.path(out_dir, "housing_mom_2sls_results.csv"), row.names = FALSE)
+write.csv(rbind(cycle_pair$demand_table, cycle_pair$supply_table), file.path(out_dir, "housing_detrended_cycle_2sls.csv"), row.names = FALSE)
+write.csv(rbind(clean_pair$demand_table, clean_pair$supply_table), file.path(out_dir, "housing_clean_ivset_results.csv"), row.names = FALSE)
+write.csv(rbind(lagged_iv_pair$demand_table, lagged_iv_pair$supply_table), file.path(out_dir, "housing_lagged_iv_results.csv"), row.names = FALSE)
+write.csv(rbind(pre_covid_pair$demand_table, pre_covid_pair$supply_table), file.path(out_dir, "housing_pre_covid_results.csv"), row.names = FALSE)
+write.csv(rbind(post_gfc_pre_covid_pair$demand_table, post_gfc_pre_covid_pair$supply_table), file.path(out_dir, "housing_post_gfc_pre_covid_results.csv"), row.names = FALSE)
+
+supply_lagged_price <- do.call(rbind, lapply(c("L1_log_price", "L3_log_price", "L6_log_price"), function(px) {
+  m <- lm(as.formula(paste("log_sales ~", px, "+ log_permit + months_supply + log_construction_cost")), data = df)
+  out <- coef_table(m, "supply", paste0("OLS_supply_", px))
+  out[out$term == px, ]
+}))
+write.csv(supply_lagged_price, file.path(out_dir, "housing_supply_lagged_price_results.csv"), row.names = FALSE)
+
+affordability_2sls <- manual_2sls(df[complete.cases(df[, c("log_sales", "affordability_pressure", "unrate", clean_supply_ivs)]), ],
+                                  "log_sales", "affordability_pressure", "unrate", clean_supply_ivs)
+write.csv(iv_table(affordability_2sls, "demand_affordability", "2SLS_manual_HC3"),
+          file.path(out_dir, "housing_affordability_demand_results.csv"), row.names = FALSE)
+
+regime_interaction <- lm(log_sales ~ log_price * high_rate + mortgage_rate * high_rate + log_income + unrate + gfc + covid, data = df)
+write.csv(coef_table(regime_interaction, "demand", "OLS_regime_interactions_HC3"),
+          file.path(out_dir, "housing_regime_interaction_results.csv"), row.names = FALSE)
+
+adf_tests <- do.call(rbind, lapply(cor_vars, function(v) {
+  x <- na.omit(df[[v]])
+  test <- tryCatch(tseries::adf.test(x), error = identity)
+  if (inherits(test, "error")) {
+    data.frame(variable = v, statistic = NA_real_, p_value = NA_real_, note = test$message)
+  } else {
+    data.frame(variable = v, statistic = unname(test$statistic), p_value = test$p.value,
+               note = "ADF null: unit root; p-values may be approximate.")
+  }
+}))
+write.csv(adf_tests, file.path(out_dir, "housing_adf_tests.csv"), row.names = FALSE)
+
+vif_extract <- function(model, equation) {
+  vals <- car::vif(model)
+  if (is.matrix(vals)) vals <- vals[, "GVIF^(1/(2*Df))"]
+  data.frame(equation = equation, term = names(vals), VIF = as.numeric(vals), row.names = NULL)
+}
+vif_diagnostics <- rbind(vif_extract(demand_ols, "demand_ols"), vif_extract(supply_ols, "supply_ols"))
+write.csv(vif_diagnostics, file.path(out_dir, "housing_vif_diagnostics.csv"), row.names = FALSE)
+
+serial_tests <- function(resid, model_name) {
+  e <- as.numeric(na.omit(resid))
+  dw <- sum(diff(e)^2) / sum(e^2)
+  lag_order <- 12
+  aux <- data.frame(e = e)
+  for (i in seq_len(lag_order)) aux[[paste0("L", i)]] <- lag_vec(e, i)
+  aux <- aux[complete.cases(aux), ]
+  bg <- lm(e ~ ., data = aux)
+  bg_stat <- nrow(aux) * summary(bg)$r.squared
+  data.frame(
+    model = model_name,
+    test = c("Durbin_Watson_stat", "Breusch_Godfrey_LM_order12"),
+    statistic = c(dw, bg_stat),
+    p_value = c(NA_real_, pchisq(bg_stat, df = lag_order, lower.tail = FALSE)),
+    row.names = NULL
+  )
+}
+serial_correlation_tests <- rbind(
+  serial_tests(resid(demand_ols), "demand_ols"),
+  serial_tests(resid(supply_ols), "supply_ols"),
+  serial_tests(demand_2sls$residuals, "demand_2sls"),
+  serial_tests(supply_2sls$residuals, "supply_2sls")
+)
+write.csv(serial_correlation_tests, file.path(out_dir, "housing_serial_correlation_tests.csv"), row.names = FALSE)
+
+bp_manual <- function(resid, fitted, model_name) {
+  aux <- lm(I(resid^2) ~ fitted + I(fitted^2))
+  stat <- length(resid) * summary(aux)$r.squared
+  data.frame(model = model_name, test = "White_style_BP_on_fitted", statistic = stat, df = 2,
+             p_value = pchisq(stat, df = 2, lower.tail = FALSE), row.names = NULL)
+}
+hetero_tests <- rbind(
+  bp_manual(resid(demand_ols), fitted(demand_ols), "demand_ols"),
+  bp_manual(resid(supply_ols), fitted(supply_ols), "supply_ols"),
+  bp_manual(demand_2sls$residuals, demand_2sls$fitted, "demand_2sls"),
+  bp_manual(supply_2sls$residuals, supply_2sls$fitted, "supply_2sls")
+)
+write.csv(hetero_tests, file.path(out_dir, "housing_heteroskedasticity_tests.csv"), row.names = FALSE)
+
+ivreg_demand <- AER::ivreg(
+  log_sales ~ log_price + mortgage_rate + log_income + unrate |
+    mortgage_rate + log_income + unrate + log_permit + months_supply + log_construction_cost,
+  data = df
+)
+ivreg_supply <- AER::ivreg(
+  log_sales ~ log_price + log_permit + months_supply + log_construction_cost |
+    log_permit + months_supply + log_construction_cost + mortgage_rate + log_income + unrate,
+  data = df
+)
+nw_compare <- function(model, equation) {
+  hc <- sandwich::vcovHC(model, type = "HC3")
+  nw <- sandwich::NeweyWest(model, lag = 6, prewhite = FALSE, adjust = TRUE)
+  est <- coef(model)
+  rows <- do.call(rbind, lapply(c("log_price", names(est)[2]), function(term) {
+    term <- unique(term)[1]
+    data.frame(
+      equation = equation,
+      term = term,
+      estimate = est[term],
+      HC3_se = sqrt(diag(hc))[term],
+      HC3_p = 2 * pnorm(abs(est[term] / sqrt(diag(hc))[term]), lower.tail = FALSE),
+      NeweyWest_lag6_se = sqrt(diag(nw))[term],
+      NeweyWest_lag6_p = 2 * pnorm(abs(est[term] / sqrt(diag(nw))[term]), lower.tail = FALSE),
+      row.names = NULL
+    )
+  }))
+  unique(rows)
+}
+write.csv(rbind(nw_compare(ivreg_demand, "demand_2sls"), nw_compare(ivreg_supply, "supply_2sls")),
+          file.path(out_dir, "housing_2sls_HC3_vs_NeweyWest.csv"), row.names = FALSE)
+
+model_scores <- aggregate(cbind(price_sign_ok, price_sig_10pct) ~ model, data = iv_grid, FUN = function(x) sum(x, na.rm = TRUE))
+overid_min <- aggregate(overid_min_p ~ model, data = iv_grid, FUN = function(x) min(x, na.rm = TRUE))
+fs_min <- aggregate(first_stage_F ~ model, data = iv_grid, FUN = function(x) min(x, na.rm = TRUE))
+model_selection <- merge(merge(model_scores, overid_min, by = "model"), fs_min, by = "model")
+model_selection$use_as_preferred <- with(model_selection, price_sign_ok == 2 & first_stage_F > 10 & overid_min_p >= 0.05)
+model_selection$use_as_sensitivity <- with(model_selection, price_sign_ok >= 1 & first_stage_F > 10)
+model_selection$reason <- ifelse(
+  model_selection$overid_min_p < 0.05,
+  "Overidentification remains rejected; use for Lecture 6 demonstration or sensitivity, not as preferred causal evidence.",
+  "No overidentification rejection and both price signs fit theory."
+)
+if (!any(model_selection$use_as_preferred)) {
+  model_selection$reason[model_selection$use_as_sensitivity] <- paste(
+    model_selection$reason[model_selection$use_as_sensitivity],
+    "No model passes the full preferred-model rule in this run."
+  )
+}
+write.csv(model_selection, file.path(out_dir, "housing_model_selection_flags.csv"), row.names = FALSE)
+
+caution_lines <- c(
+  "# Housing SEM Interpretation Cautions",
+  "",
+  "1. The static levels model is retained as the Lecture 6 baseline, but monthly housing variables are trending and serially correlated.",
+  "2. `months_supply` is not used in the clean IV set for the demand equation because it has a mechanical relationship with sales.",
+  "3. Newey-West standard errors address serial correlation in inference; they do not solve simultaneity or invalid instruments.",
+  "4. The preferred empirical discussion should compare levels, trend/month fixed effects, year-over-year changes, lagged IVs, and the pre-COVID sample.",
+  "5. Overidentification rejections are treated as warnings about exclusion restrictions, not as mechanical failures of the code.",
+  "6. The module is strongest as a Lecture 6 supply-demand SEM demonstration; causal claims should rely on the model-selection grid and diagnostic tables."
+)
+writeLines(caution_lines, file.path(out_dir, "housing_interpretation_cautions.md"))
+
 identification <- data.frame(
   equation = c("demand", "supply"),
   dependent_variable = c("log_sales", "log_sales"),
@@ -553,6 +836,14 @@ summary_lines <- c(
   paste0("Overidentification rejected at 5% in demand equation: ", any(overid_tests$equation == "demand" & overid_tests$reject_at_5pct %in% TRUE), "."),
   paste0("Overidentification rejected at 5% in supply equation: ", any(overid_tests$equation == "supply" & overid_tests$reject_at_5pct %in% TRUE), "."),
   if (nrow(system_resid) > 0) paste0("System 2SLS residual correlation = ", fmt(system_resid$residual_correlation), ", p = ", fmt(system_resid$p_value), ".") else "System residual correlation was not available.",
+  "",
+  "## Improved Time-Series Pipeline",
+  "",
+  "Following the revision notes, this version also estimates trend/month fixed-effect, lagged-sales dynamic, year-over-year, month-over-month, detrended-cycle, clean-IV, lagged-IV, pre-COVID, post-GFC/pre-COVID, lagged-supply-price, affordability, and regime-interaction variants.",
+  "Additional diagnostics include ADF unit-root tests, VIF, serial-correlation tests, heteroskedasticity tests, Newey-West versus HC3 standard errors, and a model-selection grid.",
+  paste0("ADF tests fail to reject a unit root at 5% for ", sum(adf_tests$p_value >= 0.05, na.rm = TRUE), " of ", nrow(adf_tests), " core variables, so growth-rate and detrended specifications should be discussed alongside levels."),
+  paste0("Preferred-model rule passed by any model: ", any(model_selection$use_as_preferred), ". A model must have both theoretically correct price signs, first-stage F > 10, and no overidentification rejection."),
+  "Because overidentification is still rejected in the main variants, the housing SEM should be presented as a strong Lecture 6 supply-demand demonstration with transparent diagnostic cautions, not as definitive causal evidence.",
   "",
   "## Interpretation",
   "",

@@ -7,3 +7,5 @@
 "PERMIT","permit","New privately owned housing units authorized by building permits","monthly","log","supply shifter","https://fred.stlouisfed.org/series/PERMIT"
 "MSACSR","months_supply","Monthly supply of new houses","monthly","level","supply shifter","https://fred.stlouisfed.org/series/MSACSR"
 "WPUSI012011","construction_cost","PPI special index: construction materials","monthly","log","supply shifter","https://fred.stlouisfed.org/series/WPUSI012011"
+"HOUST","housing_starts","New privately owned housing units started","monthly","log","clean supply shifter","https://fred.stlouisfed.org/series/HOUST"
+"UNDCONTSA","under_construction","New privately owned housing units under construction","monthly","log","clean supply shifter","https://fred.stlouisfed.org/series/UNDCONTSA"

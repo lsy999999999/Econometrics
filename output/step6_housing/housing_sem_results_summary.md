@@ -47,6 +47,14 @@ Overidentification rejected at 5% in demand equation: TRUE.
 Overidentification rejected at 5% in supply equation: TRUE.
 System 2SLS residual correlation = 0.521, p = 0.000.
 
+## Improved Time-Series Pipeline
+
+Following the revision notes, this version also estimates trend/month fixed-effect, lagged-sales dynamic, year-over-year, month-over-month, detrended-cycle, clean-IV, lagged-IV, pre-COVID, post-GFC/pre-COVID, lagged-supply-price, affordability, and regime-interaction variants.
+Additional diagnostics include ADF unit-root tests, VIF, serial-correlation tests, heteroskedasticity tests, Newey-West versus HC3 standard errors, and a model-selection grid.
+ADF tests fail to reject a unit root at 5% for 8 of 8 core variables, so growth-rate and detrended specifications should be discussed alongside levels.
+Preferred-model rule passed by any model: FALSE. A model must have both theoretically correct price signs, first-stage F > 10, and no overidentification rejection.
+Because overidentification is still rejected in the main variants, the housing SEM should be presented as a strong Lecture 6 supply-demand demonstration with transparent diagnostic cautions, not as definitive causal evidence.
+
 ## Interpretation
 
 This housing module is a better Lecture 6 application than the previous FOMC CAR-RV exploratory SEM because price and quantity have a standard simultaneous-equilibrium interpretation. The demand and supply equations each have clear ceteris-paribus meanings, and the excluded demand/supply shifters provide a transparent identification strategy.

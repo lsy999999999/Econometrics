@@ -1,0 +1,4 @@
+"equation","method","term","estimate","standard_error","statistic","p_value","N"
+"supply","OLS_supply_L1_log_price","L1_log_price",-0.0682720640035728,0.078884788641139,-0.865465512168063,0.387489001745531,299
+"supply","OLS_supply_L3_log_price","L3_log_price",-0.0340283426943739,0.0818567927630841,-0.41570578990141,0.677930634903915,297
+"supply","OLS_supply_L6_log_price","L6_log_price",0.0638991470875707,0.0871360312658567,0.733326342263753,0.463953840962762,294

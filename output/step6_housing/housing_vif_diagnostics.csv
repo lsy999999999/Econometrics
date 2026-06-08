@@ -1,0 +1,9 @@
+"equation","term","VIF"
+"demand_ols","log_price",15.6881301249807
+"demand_ols","mortgage_rate",1.75022576569111
+"demand_ols","log_income",14.6788312587004
+"demand_ols","unrate",1.95677150718665
+"supply_ols","log_price",16.4943433883485
+"supply_ols","log_permit",1.63331194480102
+"supply_ols","months_supply",1.65132649899033
+"supply_ols","log_construction_cost",17.2985920446228

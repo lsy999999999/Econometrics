@@ -1,0 +1,5 @@
+"equation","IV_set","test_type","statistic","df","p_value","reject_at_5pct"
+"yoy_growth_demand","d12_log_permit; d12_log_construction_cost; d12_log_starts","Sargan",88.2363183605953,2,6.91396085362226e-20,TRUE
+"yoy_growth_demand","d12_log_permit; d12_log_construction_cost; d12_log_starts","Hansen_style_J",51.9731554367364,2,5.17812694660033e-12,TRUE
+"yoy_growth_supply","d12_mortgage_rate; d12_log_income; d12_unrate","Sargan",7.66139514124564,2,0.0216944769205258,TRUE
+"yoy_growth_supply","d12_mortgage_rate; d12_log_income; d12_unrate","Hansen_style_J",10.4920634968234,2,0.00526838324349936,TRUE
