@@ -1,0 +1,3 @@
+"equation","dependent_variable","endogenous_rhs_variable","included_exogenous","excluded_exogenous","rhs_endogenous_count_Gi","excluded_exogenous_count","order_condition","economic_logic"
+"demand","log_sales","log_price","mortgage_rate; log_income; unrate","log_permit; months_supply; log_construction_cost",1,3,"overidentified","Supply shifters move the supply curve and identify demand."
+"supply","log_sales","log_price","log_permit; months_supply; log_construction_cost","mortgage_rate; log_income; unrate",1,3,"overidentified","Demand shifters move the demand curve and identify supply."

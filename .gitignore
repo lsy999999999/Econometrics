@@ -4,3 +4,6 @@
 .Rproj.user/
 *.tmp
 *.log
+data/raw/fred_housing/EXHOSLUSM495S.csv
+data/raw/fred_housing/HOSMEDUSM052N.csv
+data/raw/fred_housing/HOSSUPUSM673N.csv

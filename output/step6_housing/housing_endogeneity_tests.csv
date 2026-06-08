@@ -1,0 +1,3 @@
+"equation","test","endogenous_rhs_variable","residual_coefficient","p_value","reject_exogeneity_5pct","N"
+"demand","Durbin-Wu-Hausman residual inclusion","log_price",-0.0418116273208103,0.94076064366769,FALSE,300
+"supply","Durbin-Wu-Hausman residual inclusion","log_price",-0.165047641443793,0.370142157515875,FALSE,300

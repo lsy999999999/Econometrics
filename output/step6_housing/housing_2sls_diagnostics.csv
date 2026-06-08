@@ -1,0 +1,5 @@
+"equation","diagnostic","first_stage_F","value","weak_IV_flag_F_below_10","N"
+"demand","first_stage_relevance",78.6427898057164,0.446049754671185,FALSE,300
+"supply","first_stage_relevance",70.0251068268583,0.417582242515684,FALSE,300
+"demand","DWH_price_endogeneity",NA,0.94076064366769,FALSE,300
+"supply","DWH_price_endogeneity",NA,0.370142157515875,FALSE,300

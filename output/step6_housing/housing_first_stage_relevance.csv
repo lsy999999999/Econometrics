@@ -1,0 +1,3 @@
+"equation","endogenous_rhs_variable","excluded_IVs","first_stage_F","first_stage_p","partial_R2","weak_IV_flag_F_below_10","N"
+"demand","log_price","log_permit; months_supply; log_construction_cost",78.6427898057164,2.4068987874622e-37,0.446049754671185,FALSE,300
+"supply","log_price","mortgage_rate; log_income; unrate",70.0251068268583,3.59553141926387e-34,0.417582242515684,FALSE,300

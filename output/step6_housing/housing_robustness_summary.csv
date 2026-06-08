@@ -1,0 +1,6 @@
+"check","demand_price_coef","demand_price_p","supply_price_coef","supply_price_p","demand_sign_ok","supply_sign_ok","N","note"
+"pre_covid_2000_2019",1.07273363905252,1.02806324733572e-05,0.148875397512402,0.274222668815048,FALSE,TRUE,240,"OLS robustness check; price remains simultaneous, so interpret as sensitivity evidence."
+"post_gfc_2010_2024",0.252553329744192,0.155439251582373,0.446036219745345,0.0220041864591622,FALSE,TRUE,180,"OLS robustness check; price remains simultaneous, so interpret as sensitivity evidence."
+"yoy_growth_rates",0.676867471892074,0.000937638521410744,-0.347031260447433,0.00210732276103888,FALSE,FALSE,288,"OLS robustness check; price remains simultaneous, so interpret as sensitivity evidence."
+"month_fixed_effects",-0.144036232133536,0.665068192333711,-0.0931242024881801,0.283160473328663,TRUE,FALSE,300,"OLS robustness check; price remains simultaneous, so interpret as sensitivity evidence."
+"newey_west_lag6",-0.137428680478792,0.820694218682941,-0.0871577823516201,0.502432394760291,TRUE,FALSE,300,"Same OLS coefficients with Newey-West lag 6 standard errors."

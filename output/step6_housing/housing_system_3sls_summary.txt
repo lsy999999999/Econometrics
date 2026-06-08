@@ -1,0 +1,66 @@
+
+systemfit results 
+method: 3SLS 
+
+         N  DF     SSR  detRCov   OLS-R2 McElroy-R2
+system 600 590 35.8619 0.000679 0.644562   0.870387
+
+         N  DF      SSR      MSE     RMSE       R2   Adj R2
+demand 300 295 31.47215 0.106685 0.326627 0.376141 0.367682
+supply 300 295  4.38978 0.014881 0.121986 0.912983 0.911803
+
+The covariance matrix of the residuals used for estimation
+          demand    supply
+demand 0.1030839 0.0192366
+supply 0.0192366 0.0132170
+
+The covariance matrix of the residuals
+         demand    supply
+demand 0.106685 0.0301380
+supply 0.030138 0.0148806
+
+The correlations of the residuals
+       demand supply
+demand 1.0000 0.7564
+supply 0.7564 1.0000
+
+
+3SLS estimates for 'demand' (equation 1)
+Model Formula: log_sales ~ log_price + mortgage_rate + log_income + unrate
+Instruments: ~mortgage_rate + log_income + unrate + log_permit + months_supply + 
+    log_construction_cost
+
+                 Estimate  Std. Error  t value   Pr(>|t|)    
+(Intercept)   15.80867928  1.38178546 11.44076 < 2.22e-16 ***
+log_price      0.62278132  0.36930916  1.68634  0.0927873 .  
+mortgage_rate  0.00659571  0.01678803  0.39288  0.6946907    
+log_income    -1.74409438  0.55030140 -3.16934  0.0016883 ** 
+unrate        -0.10519270  0.01466988 -7.17066 6.0325e-12 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.326627 on 295 degrees of freedom
+Number of observations: 300 Degrees of Freedom: 295 
+SSR: 31.472147 MSE: 0.106685 Root MSE: 0.326627 
+Multiple R-Squared: 0.376141 Adjusted R-Squared: 0.367682 
+
+
+3SLS estimates for 'supply' (equation 2)
+Model Formula: log_sales ~ log_price + log_permit + months_supply + log_construction_cost
+Instruments: ~mortgage_rate + log_income + unrate + log_permit + months_supply + 
+    log_construction_cost
+
+                         Estimate  Std. Error  t value   Pr(>|t|)    
+(Intercept)            1.93577197  0.91236746  2.12170  0.0346962 *  
+log_price             -0.01514786  0.14663203 -0.10331  0.9177909    
+log_permit             0.95083011  0.02482274 38.30480 < 2.22e-16 ***
+months_supply          0.02326915  0.00392334  5.93096 8.4167e-09 ***
+log_construction_cost -0.41737240  0.15800838 -2.64146  0.0086951 ** 
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.121986 on 295 degrees of freedom
+Number of observations: 300 Degrees of Freedom: 295 
+SSR: 4.389781 MSE: 0.014881 Root MSE: 0.121986 
+Multiple R-Squared: 0.912983 Adjusted R-Squared: 0.911803 
+

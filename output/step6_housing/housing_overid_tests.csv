@@ -1,0 +1,5 @@
+"equation","IV_set","test_type","statistic","df","p_value","reject_at_5pct"
+"demand","supply_shifters","Sargan",269.943243727166,2,2.41306717022342e-59,TRUE
+"demand","supply_shifters","Hansen_style_J",148.955955881678,2,4.5146611217637e-33,TRUE
+"supply","demand_shifters","Sargan",64.0313846461012,2,1.24669865169127e-14,TRUE
+"supply","demand_shifters","Hansen_style_J",33.8369976970058,2,4.4914783230059e-08,TRUE
