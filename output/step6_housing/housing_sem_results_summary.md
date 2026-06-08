@@ -55,6 +55,15 @@ ADF tests fail to reject a unit root at 5% for 8 of 8 core variables, so growth-
 Preferred-model rule passed by any model: FALSE. A model must have both theoretically correct price signs, first-stage F > 10, and no overidentification rejection.
 Because overidentification is still rejected in the main variants, the housing SEM should be presented as a strong Lecture 6 supply-demand demonstration with transparent diagnostic cautions, not as definitive causal evidence.
 
+## Revision-2 Preferred Checks
+
+The second revision adds four focused checks: just-identified IV specifications, a year-over-year preferred transformation, a pre-COVID preferred sample, and lagged-price supply equations.
+The just-identified specifications avoid overidentification-test rejection by construction, but they cannot test exclusion restrictions; they are sign-robustness checks only.
+The year-over-year model is emphasized because the ADF tests indicate that levels are nonstationary. The pre-COVID sample is emphasized because pandemic and rapid-hiking periods likely changed housing-market behavior.
+The lagged-price supply checks address the institutional point that new housing supply responds with construction and sales delays, not necessarily within the same month.
+In the just-identified checks, theoretically correct price signs appear in 0 of 4 specifications; therefore these checks do not rescue a preferred causal interpretation.
+In the lagged-price supply checks, all three lagged price coefficients are positive, but the smallest p-value is 0.338, so this is an economically sensible but statistically weak pattern.
+
 ## Interpretation
 
 This housing module is a better Lecture 6 application than the previous FOMC CAR-RV exploratory SEM because price and quantity have a standard simultaneous-equilibrium interpretation. The demand and supply equations each have clear ceteris-paribus meanings, and the excluded demand/supply shifters provide a transparent identification strategy.

@@ -1,0 +1,5 @@
+"preferred_check","output_file","main_question","decision_rule"
+"just_identified_IV","housing_just_identified_2sls.csv","Do price coefficient signs survive when each equation uses only one excluded IV?","No overidentification test; use only as sign robustness."
+"yoy_growth_preferred","housing_yoy_preferred_results.csv","Do signs improve after removing common trends with year-over-year changes?","Prioritize if demand price is negative, mortgage-rate change is negative, and permit growth is positive."
+"pre_covid_preferred","housing_pre_covid_preferred_results.csv","Do signs improve before pandemic and rapid-rate-hike distortions?","Prioritize if signs are more theory-consistent than full-sample levels."
+"supply_lagged_price_preferred","housing_supply_lagged_price_preferred.csv","Does supply respond more clearly to lagged prices?","Use to explain insignificant same-month supply price coefficient if lagged price is positive."

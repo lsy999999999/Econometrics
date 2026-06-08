@@ -1,0 +1,4 @@
+"lagged_price_term","estimate","HC3_se","statistic","p_value","expected_positive","N","note"
+"L1_log_price",0.0190079140815332,0.14118234924197,0.134633785197581,0.892901428067624,TRUE,299,"Supply response may reflect lagged price incentives rather than same-month prices."
+"L3_log_price",0.0728030778247086,0.144116336207647,0.505168808342531,0.613440276172062,TRUE,297,"Supply response may reflect lagged price incentives rather than same-month prices."
+"L6_log_price",0.128747247844091,0.134506961384909,0.957179067302423,0.338476880683741,TRUE,294,"Supply response may reflect lagged price incentives rather than same-month prices."

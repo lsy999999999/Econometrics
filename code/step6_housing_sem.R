@@ -600,6 +600,96 @@ supply_lagged_price <- do.call(rbind, lapply(c("L1_log_price", "L3_log_price", "
 }))
 write.csv(supply_lagged_price, file.path(out_dir, "housing_supply_lagged_price_results.csv"), row.names = FALSE)
 
+just_specs <- list(
+  demand_just_permit = list(y = "log_sales", x = "log_price", included = demand_included, excluded = "log_permit", equation = "demand"),
+  demand_just_L3permit = list(y = "log_sales", x = "log_price", included = demand_included, excluded = "L3_log_permit", equation = "demand"),
+  supply_just_mortgage = list(y = "log_sales", x = "log_price", included = supply_included, excluded = "mortgage_rate", equation = "supply"),
+  supply_just_L3mortgage = list(y = "log_sales", x = "log_price", included = supply_included, excluded = "L3_mortgage_rate", equation = "supply")
+)
+just_results <- do.call(rbind, lapply(names(just_specs), function(name) {
+  spec <- just_specs[[name]]
+  needed <- unique(c(spec$y, spec$x, spec$included, spec$excluded))
+  d <- df[complete.cases(df[, needed]), ]
+  fit <- manual_2sls(d, spec$y, spec$x, spec$included, spec$excluded)
+  tab <- iv_table(fit, spec$equation, paste0("just_identified_", name))
+  fs <- first_stage_relevance(d, spec$equation, spec$x, spec$included, spec$excluded)
+  key_row <- tab[tab$term == spec$x, ][1, ]
+  data.frame(
+    model = name,
+    equation = spec$equation,
+    endogenous_rhs_variable = spec$x,
+    excluded_IV = spec$excluded,
+    price_coef = key_row$estimate,
+    price_p = key_row$p_value,
+    first_stage_F = fs$first_stage_F,
+    partial_R2 = fs$partial_R2,
+    expected_price_sign_ok = ifelse(spec$equation == "demand", key_row$estimate < 0, key_row$estimate > 0),
+    N = fit$n,
+    note = "Just identified: overidentification test unavailable; this checks sign robustness only.",
+    row.names = NULL
+  )
+}))
+write.csv(just_results, file.path(out_dir, "housing_just_identified_2sls.csv"), row.names = FALSE)
+
+yoy_preferred <- rbind(yoy_pair$demand_table, yoy_pair$supply_table)
+yoy_preferred$preferred_role <- "YoY preferred transformation because ADF tests indicate nonstationarity in levels."
+write.csv(yoy_preferred, file.path(out_dir, "housing_yoy_preferred_results.csv"), row.names = FALSE)
+
+pre_covid_preferred <- rbind(pre_covid_pair$demand_table, pre_covid_pair$supply_table)
+pre_covid_preferred$preferred_role <- "Pre-COVID preferred robustness sample: excludes pandemic and rapid-rate-hike distortions."
+write.csv(pre_covid_preferred, file.path(out_dir, "housing_pre_covid_preferred_results.csv"), row.names = FALSE)
+
+supply_lagged_price_preferred <- do.call(rbind, lapply(c("L1_log_price", "L3_log_price", "L6_log_price"), function(px) {
+  d <- df[complete.cases(df[, c("log_sales", px, supply_included, supply_excluded)]), ]
+  form <- as.formula(paste("log_sales ~", px, "+", paste(supply_included, collapse = " + ")))
+  inst_form <- as.formula(paste("~", paste(c(supply_included, supply_excluded), collapse = " + ")))
+  fit <- AER::ivreg(form, instruments = inst_form, data = d)
+  vc <- sandwich::vcovHC(fit, type = "HC3")
+  est <- coef(fit)
+  se <- sqrt(diag(vc))
+  data.frame(
+    lagged_price_term = px,
+    estimate = unname(est[px]),
+    HC3_se = unname(se[px]),
+    statistic = unname(est[px] / se[px]),
+    p_value = 2 * pnorm(abs(est[px] / se[px]), lower.tail = FALSE),
+    expected_positive = unname(est[px] > 0),
+    N = nobs(fit),
+    note = "Supply response may reflect lagged price incentives rather than same-month prices.",
+    row.names = NULL
+  )
+}))
+write.csv(supply_lagged_price_preferred, file.path(out_dir, "housing_supply_lagged_price_preferred.csv"), row.names = FALSE)
+
+preferred_grid <- data.frame(
+  preferred_check = c(
+    "just_identified_IV",
+    "yoy_growth_preferred",
+    "pre_covid_preferred",
+    "supply_lagged_price_preferred"
+  ),
+  output_file = c(
+    "housing_just_identified_2sls.csv",
+    "housing_yoy_preferred_results.csv",
+    "housing_pre_covid_preferred_results.csv",
+    "housing_supply_lagged_price_preferred.csv"
+  ),
+  main_question = c(
+    "Do price coefficient signs survive when each equation uses only one excluded IV?",
+    "Do signs improve after removing common trends with year-over-year changes?",
+    "Do signs improve before pandemic and rapid-rate-hike distortions?",
+    "Does supply respond more clearly to lagged prices?"
+  ),
+  decision_rule = c(
+    "No overidentification test; use only as sign robustness.",
+    "Prioritize if demand price is negative, mortgage-rate change is negative, and permit growth is positive.",
+    "Prioritize if signs are more theory-consistent than full-sample levels.",
+    "Use to explain insignificant same-month supply price coefficient if lagged price is positive."
+  ),
+  row.names = NULL
+)
+write.csv(preferred_grid, file.path(out_dir, "housing_preferred_model_checks.csv"), row.names = FALSE)
+
 affordability_2sls <- manual_2sls(df[complete.cases(df[, c("log_sales", "affordability_pressure", "unrate", clean_supply_ivs)]), ],
                                   "log_sales", "affordability_pressure", "unrate", clean_supply_ivs)
 write.csv(iv_table(affordability_2sls, "demand_affordability", "2SLS_manual_HC3"),
@@ -844,6 +934,15 @@ summary_lines <- c(
   paste0("ADF tests fail to reject a unit root at 5% for ", sum(adf_tests$p_value >= 0.05, na.rm = TRUE), " of ", nrow(adf_tests), " core variables, so growth-rate and detrended specifications should be discussed alongside levels."),
   paste0("Preferred-model rule passed by any model: ", any(model_selection$use_as_preferred), ". A model must have both theoretically correct price signs, first-stage F > 10, and no overidentification rejection."),
   "Because overidentification is still rejected in the main variants, the housing SEM should be presented as a strong Lecture 6 supply-demand demonstration with transparent diagnostic cautions, not as definitive causal evidence.",
+  "",
+  "## Revision-2 Preferred Checks",
+  "",
+  "The second revision adds four focused checks: just-identified IV specifications, a year-over-year preferred transformation, a pre-COVID preferred sample, and lagged-price supply equations.",
+  "The just-identified specifications avoid overidentification-test rejection by construction, but they cannot test exclusion restrictions; they are sign-robustness checks only.",
+  "The year-over-year model is emphasized because the ADF tests indicate that levels are nonstationary. The pre-COVID sample is emphasized because pandemic and rapid-hiking periods likely changed housing-market behavior.",
+  "The lagged-price supply checks address the institutional point that new housing supply responds with construction and sales delays, not necessarily within the same month.",
+  paste0("In the just-identified checks, theoretically correct price signs appear in ", sum(just_results$expected_price_sign_ok, na.rm = TRUE), " of ", nrow(just_results), " specifications; therefore these checks do not rescue a preferred causal interpretation."),
+  paste0("In the lagged-price supply checks, all three lagged price coefficients are positive, but the smallest p-value is ", fmt(min(supply_lagged_price_preferred$p_value, na.rm = TRUE)), ", so this is an economically sensible but statistically weak pattern."),
   "",
   "## Interpretation",
   "",

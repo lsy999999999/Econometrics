@@ -1,0 +1,5 @@
+"model","equation","endogenous_rhs_variable","excluded_IV","price_coef","price_p","first_stage_F","partial_R2","expected_price_sign_ok","N","note"
+"demand_just_permit","demand","log_price","log_permit",46.3308338583804,0.173600982323839,2.56972428179309,0.00863570475119843,FALSE,300,"Just identified: overidentification test unavailable; this checks sign robustness only."
+"demand_just_L3permit","demand","log_price","L3_log_permit",39.2699214283326,0.132930751587857,3.39581869593066,0.0114958251979395,FALSE,297,"Just identified: overidentification test unavailable; this checks sign robustness only."
+"supply_just_mortgage","supply","log_price","mortgage_rate",-0.145528816641765,0.459434689198875,80.0060819023553,0.213346091606022,FALSE,300,"Just identified: overidentification test unavailable; this checks sign robustness only."
+"supply_just_L3mortgage","supply","log_price","L3_mortgage_rate",-0.650510985912592,0.00567743741467108,63.9934095495507,0.179760096206622,FALSE,297,"Just identified: overidentification test unavailable; this checks sign robustness only."
